@@ -2,10 +2,17 @@
 
 - [データベース](#データベース)
   - [用語](#用語)
-    - [CRUD](#crud)
   - [構成](#構成)
+  - [CRUD](#crud)
   - [クエリ](#クエリ)
-  - [SQL構文ルール](#sql構文ルール)
+          - [select](#select)
+          - [insert](#insert)
+          - [update](#update)
+          - [delete](#delete)
+          - [drop](#drop)
+          - [alter](#alter)
+          - [トランザクション](#トランザクション)
+    - [SQL構文ルール](#sql構文ルール)
 
 ## 用語
 
@@ -39,7 +46,19 @@
 - 目標復旧時間(RTO)
   - システム障害から復旧するまでの最大許容時間
 
-### CRUD
+## 構成
+
+以下のようにデータベースは3段構造になっていることが基本
+
+- データベース
+  - スキーマ: 複数のテーブルをグルーピングして管理するための仕組み
+    - テーブル
+
+- クライアントからのURI形式の接続文字列例
+  - `DatabaseURL=postgresql://ユーザー名:パスワード@ホスト名:ポート番号/データベース名`
+
+
+## CRUD
 
 - Create
   - データの新規作成
@@ -54,20 +73,9 @@
   - データの削除(非表示か完全削除か検討)
   - delete文
 
-## 構成
-
-以下のようにデータベースは3段構造になっていることが基本
-
-- データベース
-  - スキーマ: 複数のテーブルをグルーピングして管理するための仕組み
-    - テーブル
-
-- クライアントからのURI形式の接続文字列例
-  - `DatabaseURL=postgresql://ユーザー名:パスワード@ホスト名:ポート番号/データベース名`
-
 ## クエリ
 
-- select
+###### select
 
 ```sql
 -- ソート昇順
@@ -96,27 +104,27 @@ select count(カラム名) from information_schema.columns where table_name='テ
 select * from information_schema.key_column_usage where table_schema='DB名' and table_name='テーブル名';
 ```
 
-- update
+###### insert
+
+```sql
+insert into words (english, japanese, created_at, updated_at) values 
+('availability', '可用性', now(), now()),
+('arn', 'Amazon リソースネーム (ARN)', now(), now());
+```
+
+###### update
 
 ```sql
 update TABLE_NAME set COLUMN_NAME1='AAA', COLUMN_NAME2='BBB',updated_at=now() where id=999;
 ```
 
-- delete
+###### delete
 
 ```sql
 delete from TABLE_NAME; -- テーブルを削除する
 ```
 
-- 複数insert
-
-```sql
-insert into words (english, japanese,created_at,updated_at) values 
-('availability','可用性',now(),now()),
-('arn','Amazon リソースネーム (ARN)',now(),now());
-```
-
-- drop
+###### drop
 
 ```sql
 -- 指定dデータベース削除
@@ -127,7 +135,7 @@ drop table テーブル名;
 drop table テーブル名 cascade;
 ```
 
-- alter
+###### alter
 
 ```sql
 -- 型変更
@@ -137,7 +145,7 @@ ALTER TABLE テーブル名 ALTER COLUMN カラム名 TYPE タイプ;
 ALTER TABLE テーブル名 ADD COLUMN カラム名 TYPE タイプ;
 ```
 
-- トランザクション
+###### トランザクション
 
 ```sql
 begin;
@@ -146,7 +154,7 @@ rollback; -- 戻す
 commit;
 ```
 
-## SQL構文ルール
+### SQL構文ルール
 
 - 優先度
 
@@ -166,9 +174,9 @@ commit;
 
 - `select ① from ②;`
   - ①の部分に入れたカラムを指定し、②のテーブルから取得してくる。基本selectとfromはセットで使い単体では使用しない
-  - テキスト ""で囲む
+  - テキスト `"` で囲む
   - 数値 クオテーション不要
-  - 日付 ""(ダブルクオテーション)、もしくは’’(シングルクオテーション)で囲む
+  - 日付 `"`(ダブルクオテーション)、もしくは `'`(シングルクオテーション)で囲む
 - `select ① from ② where ③ = ④;`
   - ③のカラムの中で④と一致するものを取得する
 - `select distinct(①) from ②;`
