@@ -9,6 +9,7 @@
     - [index](#index)
     - [調査](#調査)
     - [拡張機能](#拡張機能)
+      - [postgres\_fdw](#postgres_fdw)
     - [メンテナンス・パフォーマンス改善](#メンテナンスパフォーマンス改善)
     - [プライマリキー関連](#プライマリキー関連)
   - [バックアップ](#バックアップ)
@@ -187,12 +188,6 @@ SELECT count(*) FROM pg_catalog.pg_prepared_xacts;
 -- プライマリキーなど制約を確認
 SELECT * FROM information_schema.table_constraints;
 
--- インストール可能な拡張機能を確認する
-SELECT * FROM pg_available_extensions;
-
--- 現在のデータベースにインストールされているすべての拡張機能の情報を取得
-SELECT * FROM pg_extension;
-
 -- タイムアウト値確認
 show statement_timeout;
 
@@ -213,12 +208,65 @@ explain analyze select * from テーブル名;
 ### 拡張機能
 
 ```sql
+-- インストール可能な拡張機能を確認する
+SELECT * FROM pg_available_extensions;
+
+-- 現在のデータベースにインストールされているすべての拡張機能の情報を取得
+SELECT * FROM pg_extension;
+
+-- 拡張機能インストール
+create extension if not exists postgres_fdw(拡張機能名);
+
 -- 指定拡張機能アップグレードコマンド  
 ALTER EXTENSION 拡張機能名 UPDATE TO '新バージョン';
 
 -- インストール済拡張機能でデフォルトバージョンより低いものを抽出
 SELECT * FROM pg_available_extensions WHERE default_version > installed_version;
 ```
+
+#### postgres_fdw
+
+- fdw=Foreign Data Wrapperの略
+
+PostgreSQLから外部のデータソース(別のPostgreSQLや、MySQL、CSVファイルなど)をあたかもローカルのテーブルのようにSELECTで参照できる仕組み
+
+```sql
+-- postgres_fdw拡張機能インストール
+create extension if not exists postgres_fdw;
+
+-- インストール済拡張機能一覧
+SELECT * FROM pg_extension;
+
+-- 外部データベースへの接続設定
+create server 外部データベースの任意の名前
+  foreign data wrapper postgres_fdw
+  options (
+    dbname 'データベース名',
+    host 'ホスト名',
+    port '5432'
+  );
+
+-- 外部データベース一覧
+\des -- es = describe external servers
+
+-- 外部データベースへのユーザーマッピング
+create user mapping for current_user server 外部データベースの任意の名前 options (user 'ユーザー名', password 'パスワード');
+
+\deu -- describe external user mappings
+
+-- スキーマ作成
+create schema スキーマ名;
+
+-- スキーマ一覧
+\dn
+
+-- リモートテーブルを格納するためのローカル側のスキーマを作成
+import foreign schema public from server 外部データベースの任意の名前 into スキーマ名;
+
+-- リモートテーブル一覧
+\det -- et = describe external tables
+```
+
 
 ### メンテナンス・パフォーマンス改善
 
