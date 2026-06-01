@@ -124,6 +124,17 @@ update TABLE_NAME set COLUMN_NAME1='AAA', COLUMN_NAME2='BBB',updated_at=now() wh
 delete from TABLE_NAME; -- テーブルを削除する
 ```
 
+###### create
+
+```sql
+-- ユーザーを作成し、パスワードを設定し、DB作成権限 ※下記どちらも同じ
+CREATE USER ユーザー名 WITH PASSWORD 'パスワード' CREATEDB;
+CREATE ROLE ユーザー名 with createdb login password 'パスワード';
+
+-- データベース作成(所有者を指定して作成)
+create database データベース名 owner ユーザー名;
+```
+
 ###### drop
 
 ```sql
