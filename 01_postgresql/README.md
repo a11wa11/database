@@ -205,6 +205,21 @@ explain select * from テーブル名;
 explain analyze select * from テーブル名; 
 ```
 
+### ユーザー操作
+
+```sql
+-- ユーザー作成
+CREATE ROLE ユーザー名 with createdb login password 'パスワード';
+-- ユーザーを確認
+select * from pg_user;
+
+-- ユーザーパスワード変更 ALTER ROLE と ALTER USER はほぼ同義。どちらを使ってもいい
+ALTER ROLE ユーザー名 WITH PASSWORD 'パスワード';
+ALTER USER ユーザー名 WITH PASSWORD 'パスワード';
+```
+
+
+
 ### 拡張機能
 
 ```sql
