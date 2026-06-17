@@ -73,6 +73,13 @@ pg_isready -h ホスト名 -U ユーザー名
 -- ユーザー一覧
 select * from pg_user;
 
+-- スキーマ権限確認
+SELECT has_schema_privilege('データベース名', 'スキーマ名', 'USAGE') AS schema_usage;  -- USAGE
+SELECT has_schema_privilege('データベース名', 'スキーマ名', 'CREATE') AS schema_usage; -- CREATE
+
+-- テーブル権限確認
+SELECT has_table_privilege('データベース名', 'スキーマ名.テーブル名', 'SELECT') AS company_select; -- SELECT, INSERT, UPDATE, DELETE, TRUNCATEなど適宜変更
+
 -- タイムゾーン
 show timezone;
 
@@ -226,7 +233,32 @@ ALTER ROLE ユーザー名 WITH PASSWORD 'パスワード';
 ALTER USER ユーザー名 WITH PASSWORD 'パスワード';
 ```
 
+###### grant
 
+権限を付与するSQL文
+
+```sql
+------- ユーザーへスキーマ権限付与
+-- publicスキーマを指定ユーザーが利用できるようにする権限付与(既存オブジェクトへのアクセス（テーブルの参照など）)
+GRANT USAGE ON SCHEMA public TO ユーザー名;
+-- publicスキーマに指定ユーザーがオブジェクト(テーブル・ビュー等)を作成する権限付与(新しいオブジェクトを作成（テーブル作成など）)
+GRANT CREATE ON SCHEMA public TO ユーザー名;
+-- publicスキーマにCREATEとUSAGE両方の権限付与
+GRANT ALL PRIVILEGES ON SCHEMA public TO ユーザー名;
+
+------- ユーザーへテーブル権限付与
+-- public.全テーブルに対し、指定ユーザーへ全権限付与
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ユーザー名;
+-- public全テーブルを指定ユーザーがSELECT(読み取り)できるようにする権限付与
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO ユーザー名;
+
+
+------- ユーザーへ将来作成されるテーブルへ対しての権限付与
+-- public.全テーブルに対し、指定ユーザーへ全権限付与
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO ユーザー名;
+-- public.全テーブルに対し、指定ユーザーへ指定権限付与
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO ユーザー名;
+```
 
 ### 拡張機能
 
