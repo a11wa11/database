@@ -89,6 +89,14 @@ SELECT pg_size_pretty(pg_database_size(current_database())) AS database_size;
 --インデックス一覧
 SELECT * FROM pg_indexes;
 
+-- 現在のユーザー確認
+SELECT current_user, session_user;
+-- session_userは「誰がログインしたか」
+-- current_userは「今どの権限で動いているか」
+
+-- 現在の使用データベース、スキーマを確認
+SELECT current_database(), current_schema();
+
 --データが多いテーブルを知りたい(行数目安)
 SELECT
   schemaname,
