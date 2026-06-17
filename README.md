@@ -146,6 +146,10 @@ drop table テーブル名;
 drop table テーブル名 cascade;
 ```
 
+###### grant
+
+権限を付与するSQL文
+
 ###### alter
 
 ```sql
