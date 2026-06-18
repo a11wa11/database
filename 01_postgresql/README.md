@@ -63,6 +63,10 @@ pg_isready -h ホスト名 -U ユーザー名
 -- ユーザー権限
 \du
 
+-- シーケンス一覧
+\ds
+SELECT schemaname, sequencename, last_value FROM pg_sequences WHERE schemaname = 'public';
+
 -- インデックス一覧
 \di
 
