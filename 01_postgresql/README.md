@@ -235,7 +235,8 @@ ALTER USER ユーザー名 WITH PASSWORD 'パスワード';
 
 ###### grant
 
-権限を付与するSQL文
+- 権限を付与するSQL文
+  - ※シーケンスも扱うときがあるがシーケンスは、DBが連番を払い出すための専用オブジェクト。連番採番の仕組みのこと
 
 ```sql
 ------- ユーザーへスキーマ権限付与
@@ -252,12 +253,23 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ユーザー名;
 -- public全テーブルを指定ユーザーがSELECT(読み取り)できるようにする権限付与
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO ユーザー名;
 
-
 ------- ユーザーへ将来作成されるテーブルへ対しての権限付与
 -- public.全テーブルに対し、指定ユーザーへ全権限付与
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO ユーザー名;
 -- public.全テーブルに対し、指定ユーザーへ指定権限付与
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO ユーザー名;
+
+------- ユーザーへシーケンス権限付与
+-- public.全シーケンスに対し、指定ユーザーへ全権限付与
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ユーザー名;
+-- public全シーケンスを指定ユーザーがSELECT(読み取り)できるようにする権限付与
+GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO ユーザー名;
+
+------- ユーザーへ将来作成されるシーケンスへ対しての権限付与
+-- public.全シーケンスに対し、指定ユーザーへ全権限付与
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO ユーザー名;
+-- public.全シーケンスに対し、指定ユーザーへ指定権限付与
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON SEQUENCES TO ユーザー名;
 ```
 
 ### 拡張機能
