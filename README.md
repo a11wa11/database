@@ -122,6 +122,7 @@ update TABLE_NAME set COLUMN_NAME1='AAA', COLUMN_NAME2='BBB',updated_at=now() wh
 
 ```sql
 delete from TABLE_NAME; -- テーブルを削除する
+DELETE FROM TABLE_NAME WHERE カラム名 IN ('AAA', 'BBB', 'CCC'); -- テーブル内の一致するデータを削除する
 ```
 
 ###### create
