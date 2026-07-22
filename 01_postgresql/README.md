@@ -54,6 +54,8 @@ pg_isready -h ホスト名 -U ユーザー名
 
 -- テーブル
 \d (show tables;)
+-- RDSクエリエディタなど\d使えない場合
+SELECT tablename FROM pg_tables WHERE schemaname = 'public' ORDER BY tablename;
 
 -- テーブルのカラム名
 \d+ テーブル名;
