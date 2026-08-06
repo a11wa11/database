@@ -66,6 +66,13 @@ SELECT tablename FROM pg_tables WHERE schemaname = 'public' ORDER BY tablename;
 -- スキーマに所属するテーブル一覧
 \d スキーマ名.*
 
+-- テーブル権限確認
+SELECT has_table_privilege('データベース名', 'スキーマ名.テーブル名', 'SELECT') AS company_select; -- SELECT, INSERT, UPDATE, DELETE, TRUNCATEなど適宜変更
+
+-- スキーマ権限確認
+SELECT has_schema_privilege('データベース名', 'スキーマ名', 'USAGE') AS schema_usage;  -- USAGE
+SELECT has_schema_privilege('データベース名', 'スキーマ名', 'CREATE') AS schema_usage; -- CREATE
+
 -- ユーザー権限
 \du
 
@@ -82,13 +89,6 @@ SELECT schemaname, sequencename, last_value FROM pg_sequences WHERE schemaname =
 
 -- ユーザー一覧
 select * from pg_user;
-
--- スキーマ権限確認
-SELECT has_schema_privilege('データベース名', 'スキーマ名', 'USAGE') AS schema_usage;  -- USAGE
-SELECT has_schema_privilege('データベース名', 'スキーマ名', 'CREATE') AS schema_usage; -- CREATE
-
--- テーブル権限確認
-SELECT has_table_privilege('データベース名', 'スキーマ名.テーブル名', 'SELECT') AS company_select; -- SELECT, INSERT, UPDATE, DELETE, TRUNCATEなど適宜変更
 
 -- タイムゾーン
 show timezone;
@@ -108,8 +108,8 @@ SELECT * FROM pg_indexes;
 
 -- 現在のユーザー確認
 SELECT current_user, session_user;
--- session_userは「誰がログインしたか」
 -- current_userは「今どの権限で動いているか」
+-- session_userは「誰がログインしたか」
 
 -- 現在の使用データベース、スキーマを確認
 SELECT current_database(), current_schema();
