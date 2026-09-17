@@ -28,7 +28,7 @@ psql "host=ホスト名 port=5432 dbname=データベース名 user=ユーザー
 
 # スクリプト化
 DB_URL="postgresql://ユーザー名:パスワード@ホスト名:ポート番号/postgres(DB名)"
-psql "$DB_URL_PORTAL"
+psql "$DB_URL"
 
 # ファイル実行(-aでコメントも出力する)
 psql -a -h ホスト名 -U ユーザー名 -p 5432 -d データベース名 < ファイル名.sql
